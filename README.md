@@ -16,6 +16,11 @@ Solves the Riccati differential equation for the finite-horizon linear quadratic
 `[t,P] = odericcati(A,B,Q,R,S,PT,tspan)` does the same as the syntax above, but this time the cross-coupling weighting matrix <img src="https://latex.codecogs.com/svg.latex?\inline&space;\mathbf{S}\in\mathbb{R}^{{n}\times{m}}" title="" /> *is* specified.
 
 
+## Time Vector and Solution Array
+
+The time vector, <img src="https://latex.codecogs.com/svg.latex?\inline&space;\mathbf{t}\in\mathbb{R}^{{(N+1)}\times{1}}" title="" />, is defined as
+<img src="https://latex.codecogs.com/svg.latex?\inline&space;\mathbf{t}=\begin{bmatrix}t_{0}\\vdots\\t_{N}\end{bmatrix}" title="" />
+
 
 ## Examples and Additional Documentation
 
