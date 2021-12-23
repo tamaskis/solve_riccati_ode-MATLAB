@@ -22,7 +22,7 @@
 %       Applications" (p. 35)
 %   [5] https://en.wikipedia.org/wiki/Linear-quadratic_regulator
 %
-% This functions requires the ODE Solver Toolbox:
+% This function requires the ODE Solver Toolbox:
 % https://www.mathworks.com/matlabcentral/fileexchange/103975-ode-solver-toolbox
 %
 %--------------------------------------------------------------------------
