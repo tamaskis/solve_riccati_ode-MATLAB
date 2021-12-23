@@ -22,6 +22,8 @@ The time vector, <img src="https://latex.codecogs.com/svg.latex?\inline&space;\m
 
 <img src="https://latex.codecogs.com/svg.latex?\inline&space;\mathbf{t}=\begin{bmatrix}t_{0}\\\vdots\\t_{N}\end{bmatrix}" title="" />
 
+The ith "layer" of `P` (i.e. `P(:,:,i)`) stores <img src="https://latex.codecogs.com/svg.latex?\inline&space;\mat{P}(t_{i})" title="" />, where <img src="https://latex.codecogs.com/svg.latex?\inline&space;t_{i}" title="" /> is the time stored in the ith element of the time vector, <img src="https://latex.codecogs.com/svg.latex?\inline&space;\mathbf{t}" title="" />.
+
 
 ## Examples and Additional Documentation
 
