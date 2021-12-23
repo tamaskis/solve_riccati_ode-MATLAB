@@ -5,8 +5,8 @@ Solves the Riccati differential equation for the finite-horizon linear quadratic
 
 ## Syntax
 
-`P = odericcati(A,B,Q,R,N,'initial',P0,tspan)`\
-`P = odericcati(A,B,Q,R,N,'final',PT,tspan)`
+`P = odericcati(A,B,Q,R,[],PT,tspan)`\
+`P = odericcati(A,B,Q,R,S,PT,tspan)`
 
 
 ## Description
