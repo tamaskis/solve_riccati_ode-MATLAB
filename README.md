@@ -19,7 +19,8 @@ Solves the Riccati differential equation for the finite-horizon linear quadratic
 ## Time Vector and Solution Array
 
 The time vector, <img src="https://latex.codecogs.com/svg.latex?\inline&space;\mathbf{t}\in\mathbb{R}^{{(N+1)}\times{1}}" title="" />, is defined as
-<img src="https://latex.codecogs.com/svg.latex?\inline&space;\mathbf{t}=\begin{bmatrix}t_{0}\\vdots\\t_{N}\end{bmatrix}" title="" />
+
+<img src="https://latex.codecogs.com/svg.latex?\inline&space;\mathbf{t}=\begin{bmatrix}t_{0}\\\vdots\\t_{N}\end{bmatrix}" title="" />
 
 
 ## Examples and Additional Documentation
