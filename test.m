@@ -22,10 +22,10 @@ PT = ones(n);
 
 tspan = [0 10];
 
-tic
-[t,P] = odericcati_old(A,B,Q,R,[],'final',PT,tspan);
-toc
-P1 = P(:,:,1)
+%tic
+%[t,P] = odericcati_old(A,B,Q,R,[],'final',PT,tspan);
+%toc
+%P1 = P(:,:,1)
 %P(:,:,end)
 
 tic
@@ -33,4 +33,3 @@ tic
 toc
 P2 = P(:,:,1)
 %P(:,:,end)
-P1-P2

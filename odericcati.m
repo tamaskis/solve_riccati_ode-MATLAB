@@ -3,8 +3,8 @@
 % odericcati  Solves the Riccati differential equation for the 
 % finite-horizon linear quadratic regulator.
 %
-%   P = odericcati(A,B,Q,R,[],PT,tspan)
-%   P = odericcati(A,B,Q,R,S,PT,tspan)
+%   [t,P] = odericcati(A,B,Q,R,[],PT,tspan)
+%   [t,P] = odericcati(A,B,Q,R,S,PT,tspan)
 %
 % Copyright © 2021 Tamas Kis
 % Last Update: 2021-12-23
