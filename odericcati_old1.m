@@ -6,7 +6,7 @@
 %   P = odericcati(A,B,Q,R,N,'final',PT,tspan)
 %
 % Copyright © 2021 Tamas Kis
-% Last Update: 2021-12-23
+% Last Update: 2021-12-13
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -15,7 +15,7 @@
 %
 % REFERENCES:
 %   [1] https://www.mathworks.com/matlabcentral/answers/94722-how-can-i-solve-the-matrix-riccati-differential-equation-within-matlab
-%   [2] https://en.wikipedia.org/wiki/Linear-quadratic_regulator
+%   [2] https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator#Finite-horizon,_continuous-time_LQR
 %
 %--------------------------------------------------------------------------
 %
@@ -47,11 +47,11 @@
 %   --> N+1 = length of time vector
 %
 %==========================================================================
-function [t,P] = odericcati(A,B,Q,R,N,type,Pc,tspan)
+function [t,P] = odericcati_old1(A,B,Q,R,N,type,Pc,tspan)
     
-    % ----------------------
-    % Determines dimensions.
-    % ----------------------
+    % ---------------------
+    % Determines dimension.
+    % ---------------------
 
     % state dimension
     n = size(A,1);
@@ -76,35 +76,60 @@ function [t,P] = odericcati(A,B,Q,R,N,type,Pc,tspan)
     if strcmpi(type,'final')
         tspan = fliplr(tspan);
     end
-
-    % defines Riccati ODE has a matrix-valued ODE
-    dPdt = @(t,P) -(A.'*P+P*A-(P*B+N)/R*(B.'*P+N.')+Q);
-
-    % converts matrix-valued ODE to vector-valued ODE
-    dydt = odefun_mat2vec(dPdt);
-
-    % converts matrix IC to vector IC
-    y0 = odeIC_mat2vec(Pc);
     
     % solves Riccati ODE
-    [t,y] = ode45(dydt,tspan,y0);
+    [t,P] = ode45(@(t,P)riccati(t,P,A,B,Q,R,N),tspan,Pc);
 
-    % transforms solution matrix for vector-valued ODE into solution array
-    % for matrix-valued ODE
-    P = odesol_vec2mat(y);
+    % reshape (N+1)×n^2 solution matrix to n×n×(N+1)
+    P_reshaped = zeros(n,n,length(t));
+    for i = 1:length(t)
+        P_reshaped(:,:,i) = reshape(P(i,:),size(A));
+    end
+    P = P_reshaped;
 
-    % reorders t and P if solved backwards in time
+    % flips t if solved backwards in time
     if strcmpi(type,'final')
-
-        % reorders t
         t = flipud(t);
+    end
 
-        % reorders solution for P
-        P_reordered = zeros(size(P));
-        for k = 1:length(t)
-            P_reordered(:,:,k) = P(:,:,length(t)-k+1);
-        end
-        P = P_reordered;
+    % reorders solution for P if solved backwards in time
+    P_reordered = zeros(size(P));
+    for i = 1:length(t)
+        P_reordered(:,:,i) = P(:,:,length(t)-i+1);
+    end
+    P = P_reordered;
+
+    %----------------------------------------------------------------------
+    % riccati
+    %
+    % Riccati differential equation.
+    %----------------------------------------------------------------------
+    %
+    % INPUT:
+    %   t       - (1×1 double) time (needed for ODE solver convention)
+    %   P       - (n^2×1 double) column vectors of P(t) stacked into a
+    %             single vector
+    %   A       - (n×n double) system/dynamics matrix
+    %   B       - (n×m double) input/control matrix
+    %   Q       - (n×n double) state weighting matrix
+    %   R       - (m×m double) control weighting matrix
+    %   N       - (n×m double) cross-coupling weighting matrix
+    %
+    % OUTPUT:
+    %   dPdt    - (n^2×1 double) column vectors of dP/dt at time t stacked
+    %             into a single vector
+    %
+    %----------------------------------------------------------------------
+    function dPdt = riccati(t,P,A,B,Q,R,N)
+
+        % reshapes n^2×1 vector into n×n matrix
+        P = reshape(P,size(A));
+        
+        % evaluates Riccati differential equation
+        dPdt = -(A.'*P+P*A-(P*B+N)/R*(B.'*P+N.')+Q);
+        
+        % reshapes n×n matrix into n^2×1 vector
+        dPdt = dPdt(:);
 
     end
     

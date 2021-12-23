@@ -6,7 +6,7 @@
 %   P = odericcati(A,B,Q,R,N,'final',PT,tspan)
 %
 % Copyright © 2021 Tamas Kis
-% Last Update: 2021-12-23
+% Last Update: 2021-12-13
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -47,11 +47,11 @@
 %   --> N+1 = length of time vector
 %
 %==========================================================================
-function [t,P] = odericcati(A,B,Q,R,N,type,Pc,tspan)
+function [t,P] = odericcati_old2(A,B,Q,R,N,type,Pc,tspan)
     
-    % ----------------------
-    % Determines dimensions.
-    % ----------------------
+    % ---------------------
+    % Determines dimension.
+    % ---------------------
 
     % state dimension
     n = size(A,1);
@@ -81,31 +81,76 @@ function [t,P] = odericcati(A,B,Q,R,N,type,Pc,tspan)
     dPdt = @(t,P) -(A.'*P+P*A-(P*B+N)/R*(B.'*P+N.')+Q);
 
     % converts matrix-valued ODE to vector-valued ODE
-    dydt = odefun_mat2vec(dPdt);
+    dydt = @(t,y) odefun_mat2vec(dPdt,t,y);
 
     % converts matrix IC to vector IC
-    y0 = odeIC_mat2vec(Pc);
+    y0 = Pc(:);
     
     % solves Riccati ODE
     [t,y] = ode45(dydt,tspan,y0);
 
-    % transforms solution matrix for vector-valued ODE into solution array
-    % for matrix-valued ODE
+    % TODO
     P = odesol_vec2mat(y);
 
-    % reorders t and P if solved backwards in time
+    % flips t if solved backwards in time
     if strcmpi(type,'final')
-
-        % reorders t
         t = flipud(t);
+    end
 
-        % reorders solution for P
-        P_reordered = zeros(size(P));
-        for k = 1:length(t)
-            P_reordered(:,:,k) = P(:,:,length(t)-k+1);
+    % reorders solution for P if solved backwards in time
+    P_reordered = zeros(size(P));
+    for k = 1:length(t)
+        P_reordered(:,:,k) = P(:,:,length(t)-k+1);
+    end
+    P = P_reordered;
+
+
+
+    function ydot = odefun_mat2vec(F,t,y,p)
+    
+        % determine state dimension if not input (assuming a Y is square)
+        if nargin < 4
+            p = sqrt(length(y));
         end
-        P = P_reordered;
+    
+        % determines q, where Y is a p×q matrix
+        q = length(y)/p;
+        
+        % reshapes pq×1 state vector into p×q state matrix
+        Y = reshape(y,[p,q]);
+    
+        % evaluates matrix ODE
+        Ydot = F(t,Y);
+        
+        % reshapes p×q state matrix derivative into pq×1 state vector deriv.
+        ydot = Ydot(:);
+        
+    end
 
+    function Y = odesol_vec2mat(y,p)
+    
+        % state vector dimension
+        pq = size(y,2);
+    
+        % determine state dimension if not input (assuming a Y is square)
+        if nargin < 2
+            p = sqrt(pq);
+        end
+    
+        % determines q, where Y is a p×q matrix
+        q = pq/p;
+        
+        % determines N, where the ODE solution is given at N+1 points in time
+        N = size(y,1)-1;
+        
+        % preallocate array to store time history of state matrix
+        Y = zeros(p,q,N+1);
+    
+        % populates state matrix
+        for i = 1:(N+1)
+            Y(:,:,i) = reshape(y(i,:),[p,q]);
+        end
+        
     end
     
 end
