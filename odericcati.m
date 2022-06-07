@@ -7,23 +7,15 @@
 %   [t,P] = odericcati(A,B,Q,R,S,PT,tspan)
 %
 % Copyright © 2021 Tamas Kis
-% Last Update: 2021-12-23
+% Last Update: 2022-06-07
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
 % TECHNICAL DOCUMENTATION:
 % https://tamaskis.github.io/documentation/Riccati_Differential_Equation.pdf
 %
-% REFERENCES:
-%   [1] https://www.mathworks.com/help/control/ref/icare.html
-%   [2] https://tamaskis.github.io/documentation/Fixed_Step_ODE_Solvers.pdf
-%   [3] https://github.com/tamaskis/ODE_Solver_Toolbox-MATLAB
-%   [4] Lavretsky and Wise, "Robust and Adaptive Control with Aerospace
-%       Applications" (p. 35)
-%   [5] https://en.wikipedia.org/wiki/Linear-quadratic_regulator
-%
-% This function requires the ODE Solver Toolbox:
-% https://www.mathworks.com/matlabcentral/fileexchange/103975-ode-solver-toolbox
+% DEPENDENCIES:
+%   --> IVP Solver Toolbox (https://www.mathworks.com/matlabcentral/fileexchange/103975-ivp-solver-toolbox)
 %
 %--------------------------------------------------------------------------
 %
@@ -72,48 +64,48 @@ function [t,P] = odericcati(A,B,Q,R,S,PT,tspan)
     % ----------------------
     % Determines dimensions.
     % ----------------------
-
+    
     % state dimension
     n = size(A,1);
-
+    
     % input dimension
     m = size(B,2);
-
+    
     % ----------------------------------------------------
     % Sets unspecified parameters to their default values.
     % ----------------------------------------------------
-
+    
     % defaults cross-coupling matrix to 0
     if isempty(S)
         S = zeros(n,m);
     end
-
+    
     % ---------
     % Solution.
     % ---------
-
+    
     % flips tspan so the Riccati ODE is solved backwards in time
     tspan = fliplr(tspan);
-
+    
     % defines Riccati ODE has a matrix-valued ODE
     dPdt = @(t,P) -(A.'*P+P*A-(P*B+S)/R*(B.'*P+S.')+Q);
-
+    
     % converts matrix-valued ODE to vector-valued ODE
     dydt = odefun_mat2vec(dPdt);
-
+    
     % converts matrix initial condition to vector initial condition
-    yT = odeIC_mat2vec(PT);
+    yT = ivpIC_mat2vec(PT);
     
     % solves Riccati ODE
     [t,y] = ode45(dydt,tspan,yT);
-
+    
     % transforms solution matrix for vector-valued ODE into solution array
     % for matrix-valued ODE
-    P = odesol_vec2mat(y);
-
+    P = ivpsol_vec2mat(y);
+    
     % reorders t so that time is increasing
     t = flipud(t);
-
+    
     % reorders solution for P
     P_reordered = zeros(size(P));
     for k = 1:length(t)

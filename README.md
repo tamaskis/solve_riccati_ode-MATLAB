@@ -2,7 +2,7 @@
 
 Solves the Riccati differential equation for the finite-horizon linear quadratic regulator.
 
-**NOTE:** This function requires the [ODE Solver Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/103975-ode-solver-toolbox).
+**NOTE:** This function requires the [IVP Solver Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/103975-ivp-solver-toolbox).
 
 
 ## Syntax
