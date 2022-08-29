@@ -12,7 +12,7 @@
 % Contact: tamas.a.kis@outlook.com
 %
 % TECHNICAL DOCUMENTATION:
-% https://tamaskis.github.io/documentation/Riccati_Differential_Equation.pdf
+% https://tamaskis.github.io/files/Riccati_Differential_Equation.pdf
 %
 % DEPENDENCIES:
 %   • IVP Solver Toolbox (https://www.mathworks.com/matlabcentral/fileexchange/103975-ivp-solver-toolbox)

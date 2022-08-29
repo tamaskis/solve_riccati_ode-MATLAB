@@ -30,4 +30,4 @@ The ith "layer" of `P` (i.e. `P(:,:,i)`) stores <img src="https://latex.codecogs
 ## Examples and Additional Documentation
 
    - See "EXAMPLES.mlx" or the "Examples" tab on the File Exchange page for examples. 
-   - See [Riccati_Differential_Equation.pdf](https://tamaskis.github.io/documentation/Riccati_Differential_Equation.pdf) (also included with download) for additional documentation.
+   - See [Riccati_Differential_Equation.pdf](https://tamaskis.github.io/files/Riccati_Differential_Equation.pdf) (also included with download) for additional documentation.
