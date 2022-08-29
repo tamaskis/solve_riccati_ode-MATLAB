@@ -1,13 +1,13 @@
 %==========================================================================
 %
-% odericcati  Solves the Riccati differential equation for the 
+% solve_riccati_ode  Solves the Riccati differential equation for the 
 % finite-horizon linear quadratic regulator.
 %
-%   [t,P] = odericcati(A,B,Q,R,[],PT,tspan)
-%   [t,P] = odericcati(A,B,Q,R,S,PT,tspan)
+%   [t,P] = solve_riccati_ode(A,B,Q,R,[],PT,tspan)
+%   [t,P] = solve_riccati_ode(A,B,Q,R,S,PT,tspan)
 %
 % Copyright © 2021 Tamas Kis
-% Last Update: 2022-06-07
+% Last Update: 2022-08-28
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -15,7 +15,7 @@
 % https://tamaskis.github.io/documentation/Riccati_Differential_Equation.pdf
 %
 % DEPENDENCIES:
-%   --> IVP Solver Toolbox (https://www.mathworks.com/matlabcentral/fileexchange/103975-ivp-solver-toolbox)
+%   • IVP Solver Toolbox (https://www.mathworks.com/matlabcentral/fileexchange/103975-ivp-solver-toolbox)
 %
 %--------------------------------------------------------------------------
 %
@@ -53,13 +53,8 @@
 %   4. (A-BR^(-1)S^T,Q-SR^(-1)S^T) detectable
 %       • if S = 0, this condition reduces to (A,Q^(1/2)) detectable
 %
-% -----
-% NOTE:
-% -----
-%   --> N+1 = length of time vector
-%
 %==========================================================================
-function [t,P] = odericcati(A,B,Q,R,S,PT,tspan)
+function [t,P] = solve_riccati_ode(A,B,Q,R,S,PT,tspan)
     
     % ----------------------
     % Determines dimensions.
@@ -91,17 +86,17 @@ function [t,P] = odericcati(A,B,Q,R,S,PT,tspan)
     dPdt = @(t,P) -(A.'*P+P*A-(P*B+S)/R*(B.'*P+S.')+Q);
     
     % converts matrix-valued ODE to vector-valued ODE
-    dydt = odefun_mat2vec(dPdt);
+    dydt = mat2vec_ode(dPdt);
     
     % converts matrix initial condition to vector initial condition
-    yT = ivpIC_mat2vec(PT);
+    yT = mat2vec_IC(PT);
     
     % solves Riccati ODE
     [t,y] = ode45(dydt,tspan,yT);
     
     % transforms solution matrix for vector-valued ODE into solution array
     % for matrix-valued ODE
-    P = ivpsol_vec2mat(y);
+    P = vec2mat_sol(y);
     
     % reorders t so that time is increasing
     t = flipud(t);
