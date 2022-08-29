@@ -1,4 +1,4 @@
-# `solve_riccati_ode` [![View Solution of the Riccati Differential Equation (odericcati) on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/104030-solution-of-the-riccati-differential-equation-odericcati)
+# `solve_riccati_ode` [![View Solve Riccati Differential Equation (solve_riccati_ode) on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/104030-solve-riccati-differential-equation-solve_riccati_ode)
 
 Solves the Riccati differential equation for the finite-horizon linear quadratic regulator.
 
