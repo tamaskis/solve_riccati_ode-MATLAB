@@ -53,6 +53,12 @@
 %   4. (A-BR^(-1)S^T,Q-SR^(-1)S^T) detectable
 %       • if S = 0, this condition reduces to (A,Q^(1/2)) detectable
 %
+% -----
+% NOTE:
+% -----
+%   --> The nth page of "M" stores the solution corresponding to the nth 
+%       time in "t".
+%
 %==========================================================================
 function [t,P] = solve_riccati_ode(A,B,Q,R,S,PT,tspan)
     
