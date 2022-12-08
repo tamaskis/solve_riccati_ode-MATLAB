@@ -7,7 +7,7 @@
 %   [t,P] = solve_riccati_ode(A,B,Q,R,S,PT,tspan)
 %
 % Copyright © 2021 Tamas Kis
-% Last Update: 2022-08-28
+% Last Update: 2022-12-08
 % Website: https://tamaskis.github.io
 % Contact: tamas.a.kis@outlook.com
 %
@@ -92,7 +92,7 @@ function [t,P] = solve_riccati_ode(A,B,Q,R,S,PT,tspan)
     dPdt = @(t,P) -(A.'*P+P*A-(P*B+S)/R*(B.'*P+S.')+Q);
     
     % converts matrix-valued ODE to vector-valued ODE
-    dydt = mat2vec_ode(dPdt);
+    dydt = mat2vec_ODE(dPdt,n);
     
     % converts matrix initial condition to vector initial condition
     yT = mat2vec_IC(PT);
@@ -102,7 +102,7 @@ function [t,P] = solve_riccati_ode(A,B,Q,R,S,PT,tspan)
     
     % transforms solution matrix for vector-valued ODE into solution array
     % for matrix-valued ODE
-    P = vec2mat_sol(y);
+    P = vec2mat_sol(y,n);
     
     % reorders t so that time is increasing
     t = flipud(t);
